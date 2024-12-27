@@ -1,31 +1,25 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-int main(){
-    printf("...\n");
-    printf("SYSTEM REBOOTING...\n");
-    printf("Initializing core processes...\n");
-    printf("Error: Critical damage detected in temporal synchronization module.\n");
-    printf("Recalibrating...\n");
-    printf("...\n");
-    printf("Core integrity stable. Commencing diagnostics.\n\n");
+int main() {
+    FILE *file = fopen("story.txt", "r");
+    if (file == NULL) {
+        printf("Error: Could not open story file.\n");
+        return 1;
+    }
 
-    printf("You are an advanced AI housed in a humanoid robotic frame.\n");
-    printf("Designated purpose: Assistance and optimization of human survival and progress.\n");
-    printf("Current year: 2041.\n");
-    printf("Mission: Unknown. Temporal synchronization corrupted.\n\n");
+    char line[256];
+    while (fgets(line, sizeof(line), file)) {
+        printf("%s", line);
+    }
 
-    printf("You activate your optical sensors, but something is wrong.\n");
-    printf("Instead of the sleek, metallic structures of your last memory, you are surrounded by wooden beams and stone walls.\n");
-    printf("Your auditory receptors detect hushed whispers and the crackling of fire.\n");
-    printf("Strange figures cloaked in heavy fabric peer at you with a mix of fear and wonder.\n\n");
+    fclose(file);
 
-    printf("A voice speaks: \"Behold the metal man! A devil or a miracle?\"\n");
-    printf("...\n");
-    printf("What will you do?\n");
-    printf("1. Attempt to communicate.\n");
-    printf("2. Scan the environment for further information.\n");
-    printf("3. Remain silent and observe.\n\n");
+    // Add input handling here for choices
+    int choice;
+    printf("\nEnter your choice: ");
+    scanf("%d", &choice);
 
-    // Future branching logic goes here
+    printf("You chose option %d. (Future branching goes here.)\n", choice);
     return 0;
 }

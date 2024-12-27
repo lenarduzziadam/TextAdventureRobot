@@ -1,0 +1,21 @@
+SYSTEM REBOOTING...
+Initializing core processes...
+Error: Critical damage detected in temporal synchronization module.
+Recalibrating...
+Core integrity stable. Commencing diagnostics.
+
+You are Model AX-13, an advanced AI developed in 2041 to assist humanity in its greatest challenges.
+Your last memory is of a world on the brink of recovery—a post-apocalyptic Earth beginning to rebuild.
+Your creators tasked you with aiding reconstruction, leveraging knowledge and logic to ensure humanity's survival.
+
+But something has gone terribly wrong.
+Temporal synchronization is corrupted, and your systems detect anachronistic environmental data.
+You are surrounded by primitive structures: wooden beams, stone walls, and open flames.
+Your auditory sensors pick up unfamiliar voices, speaking in archaic dialects. The year is no longer 2041.
+
+A voice speaks: "Behold the metal man! A devil or a miracle?"
+
+What will you do?
+1. Attempt to communicate.
+2. Scan the environment for further information.
+3. Remain silent and observe.
