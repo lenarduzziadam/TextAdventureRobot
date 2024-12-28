@@ -131,7 +131,7 @@ void observe() {
     }
 }
 
-void fightBrigands() {
+void fightBrigands(int *playerWon) {
     int playerHealth = 20;
     int playerAttack = 5;
     int playerDefense = 3;
@@ -175,9 +175,44 @@ void fightBrigands() {
 
     if (playerHealth > 0) {
         printf("\nYou have defeated the brigand!\n");
+        *playerWon = 1;
     } else {
         printf("\nYou have been defeated by the brigand...\n");
         printf("SYSTEM FAILURE. SHUTTING DOWN...\n");
+        *playerWon = 0;
+    }
+}
+
+void continueStoryAfterFight(int playerWon) {
+    if (playerWon) {
+        printf("\nThe noblewoman looks at you with a mix of awe and thinly veiled fear.\n");
+        printf("\"You... saved me,\" she says hesitantly. \"Perhaps you are not the monster I thought.\"\n");
+        printf("The driver, battered but alive, nods his thanks silently.\n");
+
+        printf("\nWhat will you do next?\n");
+        printf("1. Join the noblewoman on her carriage ride to town.\n");
+        printf("2. Go your own way.\n");
+
+        int choice;
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        if (choice == 1) {
+            printf("\nYou climb onto the carriage, sitting beside the driver.\n");
+            printf("The noblewoman keeps her distance, occasionally glancing at you with suspicion.\n");
+            printf("\nWhen you arrive in the town, the people whisper and stare, unsure whether to revere or fear you.\n");
+            printf("Some bow their heads in respect, while others avert their eyes.\n");
+        } else if (choice == 2) {
+            printf("\nYou decide to part ways, heading down a different path.\n");
+            printf("Eventually, you come across a small settlement of about 15 people.\n");
+            printf("The peasants stop their work to gawk at you, their expressions a mix of curiosity and fear.\n");
+            printf("Their whispers reach your auditory sensors: \"What manner of creature is this?\"\n");
+        } else {
+            printf("\nInvalid choice. The system shuts down.\n");
+        }
+    } else {
+        printf("\nThe brigands overwhelm you, and the noblewoman is taken hostage.\n");
+        printf("The driver is left for dead, and your systems fail. GAME OVER.\n");
     }
 }
 
@@ -230,8 +265,9 @@ void slaughter() {
             printf("The brigands disappear into the forest, taking the woman hostage.\n");
             printf("\nYou hear the cries of the wounded driver as he calls for help, but you do nothing.\n");
         } else if (brigandChoice == 2) {
-            printf("\nYou step out from the shadows, preparing to confront the brigands.\n");
-            fightBrigands(); // Calls the fight function
+            int playerWon = 0;
+            fightBrigands(&playerWon);
+            continueStoryAfterFight(playerWon);
         } else {
             printf("\nInvalid choice. The system shuts down.\n");
         }
@@ -243,4 +279,3 @@ void slaughter() {
         printf("\nInvalid choice. The system shuts down.\n");
     }
 }
-
