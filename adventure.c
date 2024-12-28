@@ -131,45 +131,116 @@ void observe() {
     }
 }
 
-void slaughter(){
-    printf("\nYou decide to attempt to kill the unknwon human element.\n");
-    printf("You hear a squishy sound like a watermelon bursting and a series of screams\n");
-    printf("\n if you listen close you hear a baby crying and a woman wailing you hear metal being brought out of a scabbard.\n");
-    printf("You access your full strength and punch right through the individuals metal armour but\n");
-    printf("you quickly realize the assailant made contact, damage your internal structure.\n");
+void fightBrigands() {
+    int playerHealth = 20;
+    int playerAttack = 5;
+    int playerDefense = 3;
 
-    printf("\nThe threat has been sucessfully dealth with but your strength basis is now that of a normal human.\n");
-    printf("What will you do next?\n");
+    int brigandHealth = 15;
+    int brigandAttack = 4;
+
+    printf("\nYou step out from the shadows, preparing to confront the brigands.\n");
+
+    while (playerHealth > 0 && brigandHealth > 0) {
+        int action;
+        printf("\nYour Health: %d | Brigand's Health: %d\n", playerHealth, brigandHealth);
+        printf("Choose your action:\n");
+        printf("1. Attack\n");
+        printf("2. Defend\n");
+        printf("\nEnter your choice: ");
+        scanf("%d", &action);
+
+        if (action == 1) {
+            printf("\nYou attack the brigand!\n");
+            brigandHealth -= playerAttack;
+            printf("You dealt %d damage to the brigand.\n", playerAttack);
+        } else if (action == 2) {
+            printf("\nYou brace yourself for the brigand's attack.\n");
+            int reducedDamage = brigandAttack - playerDefense;
+            if (reducedDamage < 0) reducedDamage = 0;
+            printf("The brigand attacks but deals only %d damage due to your defense.\n", reducedDamage);
+            playerHealth -= reducedDamage;
+            continue;
+        } else {
+            printf("\nInvalid action! The brigand takes advantage of your hesitation and attacks.\n");
+        }
+
+        // Brigand's Turn
+        if (brigandHealth > 0) {
+            printf("\nThe brigand retaliates!\n");
+            playerHealth -= brigandAttack;
+            printf("The brigand dealt %d damage to you.\n", brigandAttack);
+        }
+    }
+
+    if (playerHealth > 0) {
+        printf("\nYou have defeated the brigand!\n");
+    } else {
+        printf("\nYou have been defeated by the brigand...\n");
+        printf("SYSTEM FAILURE. SHUTTING DOWN...\n");
+    }
+}
+
+void slaughter() {
+    printf("\nYou decide to eliminate the unknown human element.\n");
+    printf("As you strike, you hear a sickening squelch, like a watermelon bursting, followed by piercing screams.\n");
+    printf("In the distance, the wail of a woman and the cries of a baby echo through the air.\n");
+    printf("The sharp sound of metal being drawn from a scabbard cuts through the chaos.\n");
+
+    printf("\nSummoning your full strength, you drive your fist through the assailant's metal armor.\n");
+    printf("But in doing so, you realize too late that their blade has found its mark, damaging your internal systems.\n");
+
+    printf("\nThe threat has been neutralized, but your power core has been compromised.\n");
+    printf("Your strength is now reduced to that of a normal human.\n");
+
+    printf("\nWhat will you do next?\n");
+    printf("1. Continue searching for other humans.\n");
+    printf("2. Do nothing and wait.\n");
+    printf("3. Attempt a self-diagnostic scan.\n");
 
     int subchoice;
-
-    printf("\n1. Continue on looking for humans\n");
-    printf("2. Do nothing and wait\n");
-    printf("3. Try to access your internal data for self diagnostic\n");
-
     printf("\nEnter your choice: ");
     scanf("%d", &subchoice);
 
-    if(subchoice == 1){
-        printf("\nYou come across a small settlment of approximately 15 people");
-    } else if(subchoice == 2){
-        printf("\nA richly dressed noble woman passes through by wheel house with a burly driver\n");
+    if (subchoice == 1) {
+        printf("\nYou venture further and come across a small settlement of approximately 15 people.\n");
+    } else if (subchoice == 2) {
+        printf("\nAs you remain motionless, a richly dressed noblewoman passes by in a wheeled carriage, driven by a burly coachman.\n");
+        printf("The noblewoman glances disdainfully at the countryside and mutters under her breath, loud enough for the driver to hear:\n");
+        printf("\"Such squalor. These peasants should be grateful I even tolerate traveling through their wretched lands.\"\n");
+        printf("The driver says nothing, his hands gripping the reins tightly, his expression stoic.\n");
 
-        printf("1. Do nothing\n");
-        printf("2. Approch the wheelhouse. \n");
-        printf("\nWhat will you do?: ");
+        printf("\nYou stay hidden, watching as the carriage creaks down the dirt road.\n");
+        printf("After a few moments, you notice shadows moving among the trees.\n");
+        printf("A group of brigands emerges, blocking the carriage's path.\n");
+        printf("The leader shouts, \"Stop! Hand over the lady and the goods, and no one gets hurt!\"\n");
 
-        int innerChoiceTwo;
+        printf("\nWhat will you do?\n");
+        printf("1. Continue to remain hidden and do nothing.\n");
+        printf("2. Intervene to stop the brigands.\n");
 
-        scanf("%d", &innerChoiceTwo);
+        int brigandChoice;
+        printf("\nEnter your choice: ");
+        scanf("%d", &brigandChoice);
 
-        //continue loop logic here
-    } else if(subchoice == 3){
-        printf("\nPERFORMING SELF DIAGNOSIS FULL RECOVERABILITY OF STRENGTH IMPOSSIBLE\n");
-        printf("However, Partial recoverability is possible if....");
-
-    } else{
-        printf("\nINVALID CHOICE SYSTEM SHUT DOWN");
+        if (brigandChoice == 1) {
+            printf("\nYou remain in the shadows, silently observing.\n");
+            printf("The brigands drag the noblewoman out of the carriage, ignoring her screams of protest.\n");
+            printf("Her driver tries to defend her but is quickly overwhelmed and left for dead.\n");
+            printf("The brigands disappear into the forest, taking the woman hostage.\n");
+            printf("\nYou hear the cries of the wounded driver as he calls for help, but you do nothing.\n");
+        } else if (brigandChoice == 2) {
+            printf("\nYou step out from the shadows, preparing to confront the brigands.\n");
+            fightBrigands(); // Calls the fight function
+        } else {
+            printf("\nInvalid choice. The system shuts down.\n");
+        }
+    } else if (subchoice == 3) {
+        printf("\nInitiating self-diagnostic scan...\n");
+        printf("DIAGNOSTIC COMPLETE: Full strength recovery impossible.\n");
+        printf("Partial recovery may be achievable if certain components are replaced or repaired.\n");
+    } else {
+        printf("\nInvalid choice. The system shuts down.\n");
     }
-
 }
+
