@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <signal.h>
 
 void communicate();
 void scan();
@@ -78,6 +81,15 @@ void communicate() {
         printf("\nInvalid choice. The system shuts down.\n");
     }
 }
+void puzzleChallenge() {
+    printf("\nLaunching the puzzle mini-game...\n");
+
+    char *args[] = {"./puzzle_game", NULL}; // Replace "puzzle_game" with your mini-game executable name
+    execvp(args[0], args);
+
+    perror("Failed to launch the puzzle mini-game");
+    exit(1);
+}
 
 // Scanning Path
 void scan() {
@@ -111,6 +123,29 @@ void scan() {
     }
 }
 
+void timeOutHandler(int sig) {
+    printf("\nTime's up! You failed to act in time.\n");
+    exit(0);
+}
+
+void timedChallenge() {
+    signal(SIGALRM, timeOutHandler);
+    alarm(10); // 10-second timer
+
+    int choice;
+    printf("Enter your choice quickly: ");
+    scanf("%d", &choice);
+
+    alarm(0); // Cancel the alarm if a choice is made
+    if (choice == 1) {
+        printf("\nYou rush toward the noise and find a group of villagers arguing.\n");
+    } else if (choice == 2) {
+        printf("\nYou remain hidden, watching the scene unfold.\n");
+    } else {
+        printf("\nInvalid choice. The system shuts down.\n");
+    }
+}
+
 // Observation Path
 void observe() {
     printf("\nYou decide to remain silent and observe the villagers.\n");
@@ -128,6 +163,37 @@ void observe() {
         printf("\nYour retreat makes the villagers uneasy. They decide to summon their leader to investigate.\n");
     } else {
         printf("\nInvalid choice. The system shuts down.\n");
+    }
+}
+void brigandAttack() {
+    printf("\nThe brigand continues to threaten the noblewoman.\n");
+    sleep(3);
+    printf("\nThe noblewoman screams as the brigand prepares to strike!\n");
+}
+
+void villageFire() {
+    printf("\nThe fire is spreading rapidly through the village!\n");
+    sleep(3);
+    printf("\nVillagers are panicking as their homes burn.\n");
+}
+
+void parallelEvents() {
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        perror("Fork failed");
+        exit(1);
+    } else if (pid == 0) {
+        // Child process: Brigand attack
+        brigandAttack();
+        exit(0);
+    } else {
+        // Parent process: Village fire
+        villageFire();
+
+        // Wait for the child process to finish
+        wait(NULL);
+        printf("\nBoth events have concluded. Your choice might have changed the outcome.\n");
     }
 }
 
