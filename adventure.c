@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <strings.h>
 #include <sys/types.h>
 #include <signal.h>
 
@@ -82,27 +83,57 @@ void communicate() {
     }
 }
 void puzzleChallenge() {
-    printf("\nLaunching the puzzle mini-game...\n");
+    printf("\nYou encounter a locked chest. Solve the puzzle to unlock it.\n");
 
-    char *args[] = {"./puzzle_game", NULL}; // Replace "puzzle_game" with your mini-game executable name
-    execvp(args[0], args);
+    pid_t pid = fork(); // Create a child process
 
-    perror("Failed to launch the puzzle mini-game");
-    exit(1);
+    if (pid < 0) {
+        perror("Fork failed");
+        exit(1);
+    } else if (pid == 0) {
+        // Child process: Execute the puzzle mini-game
+        char *args[] = {"./puzzle_game", NULL}; // Ensure the puzzle_game executable exists in the same directory
+        execvp(args[0], args);
+
+        // If execvp fails
+        perror("Failed to launch the puzzle mini-game");
+        exit(1);
+    } else {
+        // Parent process: Wait for the child process to complete
+        int status;
+        wait(&status); // Wait for the child process to finish
+
+        if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
+            printf("\nThe puzzle is solved! The chest unlocks, revealing valuable items.\n");
+        } else {
+            printf("\nYou failed to solve the puzzle. The chest remains locked.\n");
+        }
+
+        // Continue with the adventure
+        printf("\nYou step away from the chest and continue exploring.\n");
+    }
 }
 
 // Scanning Path
+void scanLockedDoor();
+void scanAncientDevice();
+void scanHiddenEnemy();
+void scanRiddleWall();
+
 void scan() {
     printf("\nYou activate your environmental sensors to scan the surroundings.\n");
     printf("Your sensors detect low levels of technology, wooden structures, and biological activity.\n");
+
+    int mainChoice;
+    printf("\nWhat will you focus on?\n");
     printf("1. Continue scanning for threats.\n");
-    printf("2. Stop scanning and observe the villagers.\n");
+    printf("2. Explore specific points of interest detected by your sensors.\n");
+    printf("3. Stop scanning and observe the villagers.\n");
 
-    int subchoice;
     printf("\nEnter your choice: ");
-    scanf("%d", &subchoice);
+    scanf("%d", &mainChoice);
 
-    if (subchoice == 1) {
+    if (mainChoice == 1) {
         printf("\nYour scan reveals an approaching band of armed individuals. They seem hostile.\n");
         printf("Do you:\n");
         printf("1. Warn the villagers.\n");
@@ -113,13 +144,116 @@ void scan() {
 
         if (action == 1) {
             printf("\nThe villagers are grateful for your warning and begin fortifying their defenses.\n");
-        } else {
+        } else if (action == 2) {
             printf("\nYou prepare for battle. The villagers watch in awe as you display advanced combat capabilities.\n");
+        } else {
+            printf("\nInvalid choice. Returning to scanning options.\n");
         }
-    } else if (subchoice == 2) {
+    } else if (mainChoice == 2) {
+        int scanChoice;
+        printf("\nYour sensors pick up multiple points of interest. What will you investigate?\n");
+        printf("1. A locked metallic door.\n");
+        printf("2. A strange energy signature from an ancient device.\n");
+        printf("3. Movement in the shadows.\n");
+        printf("4. Cryptic carvings on a stone wall.\n");
+
+        printf("\nEnter your choice: ");
+        scanf("%d", &scanChoice);
+
+        if (scanChoice == 1) {
+            scanLockedDoor(); // Locked door scenario
+        } else if (scanChoice == 2) {
+            scanAncientDevice(); // Ancient device scenario
+        } else if (scanChoice == 3) {
+            scanHiddenEnemy(); // Hidden enemy scenario
+        } else if (scanChoice == 4) {
+            scanRiddleWall(); // Riddle wall scenario
+        } else {
+            printf("\nInvalid choice. Returning to scanning options.\n");
+        }
+    } else if (mainChoice == 3) {
         printf("\nThe villagers notice your passive observation and start to whisper among themselves.\n");
     } else {
         printf("\nInvalid choice. The system shuts down.\n");
+    }
+}
+
+// Scenario Implementations
+
+void scanLockedDoor() {
+    printf("\nYour scan reveals a hidden metallic door buried under rubble.\n");
+    printf("The door is locked and requires a mechanism to open.\n");
+    printf("Solve the puzzle to unlock the door.\n");
+
+    puzzleChallenge(); // Puzzle game integration
+
+    printf("\nIf you solved the puzzle, the door creaks open, revealing a hidden room filled with ancient artifacts.\n");
+    printf("If you failed, the door remains firmly shut, a mystery for another time.\n");
+}
+
+void scanAncientDevice() {
+    printf("\nYour scan detects an ancient device embedded in the ground. It emits faint energy signatures.\n");
+    printf("It looks like a control panel, though the symbols on it are unfamiliar.\n");
+
+    int choice;
+    printf("\nWhat will you do?\n");
+    printf("1. Attempt to activate the device.\n");
+    printf("2. Leave it alone.\n");
+
+    printf("\nEnter your choice: ");
+    scanf("%d", &choice);
+
+    if (choice == 1) {
+        printf("\nYou attempt to activate the device. The symbols begin to glow faintly.\n");
+        printf("Solve the puzzle to configure the device.\n");
+
+        puzzleChallenge(); // Puzzle game integration
+
+        printf("\nIf you solved the puzzle, the device hums to life, projecting a holographic map of the area.\n");
+        printf("If you failed, the device shuts down, refusing to reactivate.\n");
+    } else if (choice == 2) {
+        printf("\nYou decide to leave the device alone, sensing that tampering with it could be risky.\n");
+    } else {
+        printf("\nInvalid choice. Returning to scanning options.\n");
+    }
+}
+
+void scanHiddenEnemy() {
+    printf("\nYour scan reveals movement in the shadows—a figure lurking with a weapon.\n");
+    printf("It seems like an ambush! What will you do?\n");
+
+    int choice;
+    printf("\n1. Confront the figure.\n");
+    printf("2. Try to sneak away.\n");
+
+    printf("\nEnter your choice: ");
+    scanf("%d", &choice);
+
+    if (choice == 1) {
+        printf("\nYou confront the hidden figure, and they leap out to attack!\n");
+        printf("Prepare for combat.\n");
+        // Call combat logic here
+    } else if (choice == 2) {
+        printf("\nYou try to sneak away, but the figure notices you and gives chase!\n");
+        // Add chase or escape logic here
+    } else {
+        printf("\nInvalid choice. Returning to scanning options.\n");
+    }
+}
+
+void scanRiddleWall() {
+    printf("\nYour scan reveals a stone wall with strange carvings.\n");
+    printf("The carvings form a riddle:\n");
+    printf("\"I am always hungry, I must always be fed. The finger I touch, will soon turn red. What am I?\"\n");
+
+    char answer[20];
+    printf("\nEnter your answer: ");
+    scanf("%s", answer);
+
+    if (strcasecmp(answer, "fire") == 0) {
+        printf("\nCorrect! The wall slides open, revealing a hidden passage.\n");
+    } else {
+        printf("\nIncorrect. The wall remains closed.\n");
     }
 }
 
